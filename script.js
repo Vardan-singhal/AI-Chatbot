@@ -82,7 +82,7 @@ function showTypingIndicator() {
     indicator.innerHTML = `
     <div class = "avatar"> AI </div>
     <div class = "typing-indicator">
-    <div class = "dot"></div>2
+    <div class = "dot"></div>
     <div class = "dot"></div>
     <div class = "dot"></div>
     </div>
