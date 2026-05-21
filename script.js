@@ -37,30 +37,21 @@ document.addEventListener("DOMContentLoaded", () =>{
 
 
 async function generateResponse(prompt) {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=AIzaSyBFxwaWPMOmtGmfgl-vJ_Osp1w14ONpe7E`, 
-    {
-        method : "POST",
-        headers : {
-            "Content-Type" : "application/json"
+    const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
         },
-        body : JSON.stringify({
-            contents: [
-                {
-                    parts: [
-                        {
-                            text: prompt
-                        },
-                    ],
-                },
-            ],
-        }),
+        body: JSON.stringify({ prompt }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || "Failed to generate the response.");
     }
-);
-if(!response.ok) {
-    throw new Error("Failed to generate the response.");
-}
-const data = await response.json();
-return data.candidates[0].content.parts[0].text;
+
+    const data = await response.json();
+    return data.text;
 }
 
 function addMessage(text, isUser){
@@ -101,6 +92,8 @@ function addErrorMessage(text) {
     Error : ${text}
     </div>
     `;
+    chatMessages.appendChild(message);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 
